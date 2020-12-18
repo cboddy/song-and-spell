@@ -7,7 +7,7 @@ A key-logger that triggers playing an audio track when a sequence of keys are pr
 
 ### todo 
 
-* key-logger
+* ~~key-logger~~
 * flask-web-app
     * list of words and files/links
       * remove word/file
