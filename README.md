@@ -18,3 +18,10 @@ A key-logger that triggers playing an audio track when a sequence of keys are pr
     * run on start-up
     * restart on error
 * bash script to deploy (ideally to an [rpi-400]https://www.raspberrypi.org/products/raspberry-pi-400/)
+
+### setup
+```
+python3 -m venv
+. bin/venv/activate
+pip3 install -r requirements.txt
+```
