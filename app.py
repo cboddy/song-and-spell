@@ -15,7 +15,7 @@ def build_app():
 
     @app.route("/")
     def index():
-        return flask.render_template('index.html')
+        return flask.render_template('index.html', word_to_path=app.word_to_path)
 
     def load_config() -> Dict[str,str]:
         """Loads the config file"""
