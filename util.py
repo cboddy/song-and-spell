@@ -1,6 +1,6 @@
 import pynput.keyboard as Keyboard
-from typing import Callable, Tuple
-
+import youtube_dl
+from typing import Callable, Tuple, Optional
 
 class KeyLogger(object):
     """Log the past N key-presses"""
@@ -50,11 +50,31 @@ class KeyLogger(object):
         listener.start()
 
 
+def download_audio(youtube_url: str, local_path: str, progress_hook: Optional[Callable]=None) -> None:
+    """Download a youtube link as an audio file and store it  locally"""
+    _opts = {
+    'format': 'bestaudio/best',
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '192',
+    }],
+    #'logger': MyLogger(),
+    'progress_hooks': [progress_hook],
+}
+    
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([youtube_url])
+
+
+
 def main():
+    download_audio('https://www.youtube.com/watch?v=BaW_jenozKc', None)
+    """
     on_press, on_release = KeyLogger(10).call_backs()
     with Keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
-
+    """
 
 if __name__ == "__main__":
     main()

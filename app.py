@@ -2,7 +2,7 @@ import flask
 import xdg
 import os
 import json
-from keylogger import KeyLogger
+import util
 from typing import Optional, Dict
 import os.path
 
@@ -36,7 +36,7 @@ def build_app():
     def init():
         os.makedirs(os.path.dirname(app.config_path), exist_ok=True)
         os.makedirs(app.data_path, exist_ok=True)
-        app.key_logger = KeyLogger(100)
+        app.key_logger = util.KeyLogger(100)
         try:
             app.word_to_path = load_config()
         except FileNotFoundError:
