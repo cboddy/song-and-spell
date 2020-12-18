@@ -1,8 +1,8 @@
 import pynput.keyboard as Keyboard
-from typing import Callable
+from typing import Callable, Tuple
 
 
-class Logger(object):
+class KeyLogger(object):
     """Log the past N key-presses"""
 
     def __init__(self, max_length: int = 100):
@@ -26,27 +26,32 @@ class Logger(object):
             return "".join(self.pressed[left:]) + "".join(self.pressed[:right])
         return "".join(self.pressed[:n])
 
-    def call_backs(self) -> Callable:
-        """Build callbacks for the key-logger"""
+    def call_backs(self) -> Tuple[Callable]:
+        """Build callbacks for the key-logger."""
 
         def on_press(key):
             # Callback for  key-press
             try:
                 char = key.char
-                print(f"Logged key '{char}'")
                 self.append(char)
-                print("pressed", self.pressed)
             except AttributeError:
-                print(f"Special key {key} pressed!")
+                # special key press
+                pass
 
         def on_release(key):
             pass
 
         return on_press, on_release
 
+    def start(self):
+        """Start a keyboard listener"""
+        on_press, on_release = self.call_backs()
+        listener = Keyboard.Listener(on_press=on_press, on_release=on_release)
+        listener.start()
+
 
 def main():
-    on_press, on_release = Logger(10).call_backs()
+    on_press, on_release = KeyLogger(10).call_backs()
     with Keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
 
