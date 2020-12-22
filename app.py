@@ -6,6 +6,7 @@ from typing import Optional, Dict
 import os.path
 import re
 
+VALID_WORD = "^\w+$"
 
 def build_app():
     """Build the flask app"""
@@ -62,12 +63,13 @@ def build_app():
         os.makedirs(app.data_path, exist_ok=True)
         util.ensure_vlc()
         def get_path(word: str) -> str:
-            assert  re.match('^\w+$', word), f'Word {word} is not valid'
+            assert  re.match(VALID_WORD, word), f'Word {word} is not valid'
             return os.path.join(app.data_path, word)
 
         app.get_path = get_path
         app.list_words = lambda :[os.path.basename(f)
-                                  for f in os.listdir(app.data_path)]
+                                  for f in os.listdir(app.data_path)
+                                  if re.match(VALID_WORD, f)]
         def on_press(last_n: str) -> None:
             words = app.list_words()
             try:
@@ -82,7 +84,7 @@ def build_app():
         app.key_logger = util.KeyLogger(100, on_press)
         app.key_logger.start()
         app.debug = True
-        app.secret_key= os.urandom(24)
+        app.secret_key= os.urandom(24) # for flask.flash
     app.init = init
     return app
             

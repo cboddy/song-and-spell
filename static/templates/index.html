@@ -5,13 +5,17 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th scope="col">Play the word!</th>
+                    <th scope="col">Word</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 {% for word in words %}
                 <tr>
-                    <td>  <a class="btn btn-primary btn-lg" href="/play/{{ word }} " role="button">{{ word }} </a></td>
+                    <td>{{ word }}</td>
+                    <td>  <a class="btn btn-primary btn-lg" href="/play/{{ word }} " role="button">Play Now</a></td>
+                    <td>  <a class="btn btn-primary btn-lg" href="/delete/{{ word }} " role="button">Delete</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
