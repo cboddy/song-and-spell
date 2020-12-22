@@ -1,6 +1,5 @@
 import flask
 import xdg
-import os
 import json
 import util
 from typing import Optional, Dict
