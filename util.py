@@ -1,6 +1,6 @@
 import pynput.keyboard as Keyboard
 import youtube_dl
-from typing import Callable, Tuple, Optional
+from typing import Callable, Tuple, Optional, List
 import subprocess
 import os
 
@@ -10,10 +10,12 @@ unmute_sh=r"""for card in $(amixer scontrols | sed "s/.* '\(.*\)',/\1/"); do ami
 class KeyLogger(object):
     """Log the past N key-presses"""
 
-    def __init__(self, max_length: int = 100):
+    def __init__(self, max_length: int, on_press: Callable[[str], None]):
+        """on_press should take a string of the last max_length keys that have been pressed"""
         self.max_length = max_length
         self.index = 0
         self.pressed = [" "] * max_length
+        self.on_press= on_press
 
     @property
     def pos(self) -> int:
@@ -22,27 +24,20 @@ class KeyLogger(object):
     def append(self, char: str) -> None:
         self.pressed[self.pos] = char
         self.index += 1
-
-    def get_last(self, n: int) -> str:
-        pos = self.pos
-        if pos < n:
-            left = n + pos - 1
-            right = pos
-            return "".join(self.pressed[left:]) + "".join(self.pressed[:right])
-        return "".join(self.pressed[:n])
+    
+    def get_last(self) -> str:
+        return "".join(self.pressed[self.pos:]) + "".join(self.pressed[:self.pos])
 
     def call_backs(self) -> Tuple[Callable]:
         """Build callbacks for the key-logger."""
-
         def on_press(key):
-            # Callback for  key-press
+            # Callback for key-press
             try:
-                char = key.char
-                self.append(char)
+                self.append(key.char)
+                self.on_press(self.get_last())
             except AttributeError:
                 # special key press
                 pass
-
         def on_release(key):
             pass
 

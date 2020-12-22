@@ -53,10 +53,22 @@ def build_app():
         def get_path(word: str) -> str:
             assert  re.match('^\w+$', word), f'Word {word} is not valid'
             return os.path.join(app.data_path, word)
+
         app.get_path = get_path
         app.list_words = lambda :[os.path.basename(f)
                                   for f in os.listdir(app.data_path)]
-        app.key_logger = util.KeyLogger(100)
+        def on_press(last_n: str) -> None:
+            words = app.list_words()
+            try:
+                longest_match = next(word 
+                                for word in sorted(words, key=lambda w: len(w), reverse=True)
+                                if word == last_n[- len(word):])
+            except StopIteration:
+                return
+            local_path = app.get_path(longest_match)
+            util.play_audio(local_path)
+
+        app.key_logger = util.KeyLogger(100, on_press)
         app.key_logger.start()
     app.init = init
     return app
