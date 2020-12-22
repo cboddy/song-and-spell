@@ -17,11 +17,18 @@ def build_app():
         words = app.list_words()
         return flask.render_template('index.html', words=words)
 
-    @app.route("/upsert/<word>/<url>")
-    def add_word(word: str, url: str):
+    @app.route("/add_word", methods=['POST', 'GET'])
+    def add_word():
         """Create or update a word -> song mapping"""
-        local_path = app.get_path(word)
-        util.download_audio(url, local_path)
+        if flask.request.method == 'POST':
+            word = flask.request.form['word']
+            url = flask.request.form['ytLink']
+            local_path = app.get_path(word)
+            app.logger.info(f'Adding word {word} with url {url}')
+            util.download_audio(url, local_path)
+            return flask.redirect(flask.url_for('index'))
+        else:
+            return flask.render_template('add_word.html')
 
     @app.route("/delete/<word>")
     def delete_word(word: str):
@@ -70,6 +77,7 @@ def build_app():
 
         app.key_logger = util.KeyLogger(100, on_press)
         app.key_logger.start()
+        app.debug = True
     app.init = init
     return app
             

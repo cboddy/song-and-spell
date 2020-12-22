@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form id="add_word_form" action="" role="form" method="post">
+
+    <div class="form-group">
+        <label for="word">Word</label>
+        <input type="text" class="form-control" id="word" aria-describedby="wordHelp" placeholder="Enter word" name="word" step="any">
+        <small id="wordHelp" class="form-text text-muted">Add a word.</small>
+    </div>
+
+    <div class="form-group">
+        <label for="ytLink">Youtube link</label>
+        <input type="text" class="form-control" id="ytLink" aria-describedby="ytLinkHelp" placeholder="Enter Youtube link" name="ytLink" step="any">
+        <small id="ytLinkHelp" class="form-text text-muted">Add youtube link for word.</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{%  endblock content %}

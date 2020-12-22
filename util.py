@@ -26,13 +26,15 @@ class KeyLogger(object):
         self.index += 1
     
     def get_last(self) -> str:
-        return "".join(self.pressed[self.pos:]) + "".join(self.pressed[:self.pos])
+        pos = self.pos
+        return "".join(self.pressed[pos:]) + "".join(self.pressed[:pos])
 
     def call_backs(self) -> Tuple[Callable]:
         """Build callbacks for the key-logger."""
         def on_press(key):
             # Callback for key-press
             try:
+                #print(f'Appending {key.char}')
                 self.append(key.char)
                 self.on_press(self.get_last())
             except AttributeError:
@@ -61,11 +63,12 @@ def download_audio(youtube_url: str, local_path: str, progress_hook: Optional[Ca
         'preferredquality': '192',
         
     }],
+    'keepvideo': True
     #'logger': MyLogger(),
-    'progress_hooks': [progress_hook],
+    #'progress_hooks': [progress_hook],
 }
     
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+    with youtube_dl.YoutubeDL(_opts) as ydl:
         ydl.download([youtube_url])
 
 def ensure_vlc():
