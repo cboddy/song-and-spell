@@ -1,6 +1,9 @@
 import pynput.keyboard as Keyboard
 import youtube_dl
 from typing import Callable, Tuple, Optional
+import subprocess
+mute_sh=r"""for card in $(amixer scontrols | sed "s/.* '\(.*\)',/\1/"); do amixer sset $card mute; done"""
+unmute_sh=r"""for card in $(amixer scontrols | sed "s/.* '\(.*\)',/\1/"); do amixer sset $card unmute; done"""
 
 class KeyLogger(object):
     """Log the past N key-presses"""
@@ -53,11 +56,13 @@ class KeyLogger(object):
 def download_audio(youtube_url: str, local_path: str, progress_hook: Optional[Callable]=None) -> None:
     """Download a youtube link as an audio file and store it  locally"""
     _opts = {
+    'outtmpl': local_path,
     'format': 'bestaudio/best',
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
         'preferredquality': '192',
+        
     }],
     #'logger': MyLogger(),
     'progress_hooks': [progress_hook],
@@ -66,7 +71,15 @@ def download_audio(youtube_url: str, local_path: str, progress_hook: Optional[Ca
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([youtube_url])
 
+def play_audio(local_path: str):
+    """Play a local file with VLC"""
+    subprocess.call(['cvlc', local_path])
+    
+def mute_all():
+    subprocess.call(mute_sh, shell=True)
 
+def unmute_all():
+    subprocess.call(unmute_sh, shell=True)
 
 def main():
     download_audio('https://www.youtube.com/watch?v=BaW_jenozKc', None)

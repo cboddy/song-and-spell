@@ -8,12 +8,14 @@ A key-logger that triggers playing an audio track when a sequence of keys are pr
 ### todo 
 
 * ~~key-logger~~
-* flask-web-app
-    * list of words and files/links
+* ~~youtube-dl the link and store as mp3 locally.~~
+* ~~flask-web-app~~
+    * ~~list of words and files/links~~
+    * mute
+    * upload file
       * remove word/file
     * form add word/link 
-      * youtube-dl the link and store as mp3 locally.
-    * sqlite or folder/json file for storage
+    * ~~sqlite or folder/json file for storage~~
 * systemd service to:
     * run on start-up
     * restart on error

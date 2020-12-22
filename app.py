@@ -17,6 +17,32 @@ def build_app():
     def index():
         return flask.render_template('index.html', word_to_path=app.word_to_path)
 
+    @app.route("/upsert/<word>/<url>")
+    def add_word(word: str, url: str):
+        """Create or update a word -> song mapping"""
+        util.download_audio(url,
+
+    @app.route("/delete/<word>")
+    def delete_word(word: str):
+        """Delete a word"""
+        app.word_to_path.delete(word)
+
+    @app.route("/mute/")
+    def mute():
+        """Mute all sound devices"""
+        util.mute_all()
+
+    @app.route("/unmute/")
+    def mute():
+        """Unmute all sound devices"""
+        util.unmute_all()
+
+    @app.route("/play/<word>")
+    def play_song(word: str):
+        """Play the song for a word"""
+        util.play_audio(app.word_to_path.get_path(word))
+
+
     def load_config() -> Dict[str,str]:
         """Loads the config file"""
         with open(app.config_path) as f:
@@ -33,16 +59,24 @@ def build_app():
         with open(self.config_path, "w") as f:
             json.dump(self.word_to_path, f)
 
+    def ensure_vlc():
+        """Raise an error if VLC is not installed"""
+        rc = os.system("which cvlc")
+        if rc != 0:
+            raise ValueError('VLC is not installed on the host')
+
     def init():
         os.makedirs(os.path.dirname(app.config_path), exist_ok=True)
         os.makedirs(app.data_path, exist_ok=True)
         app.key_logger = util.KeyLogger(100)
         try:
-            app.word_to_path = load_config()
+            word_to_path = load_config()
         except FileNotFoundError:
             app.word_to_path = {}
-        validate_config(app.word_to_path)
+        validate_config(word_to_path)
+        app.word_to_path = Words(word_to_path) 
         app.key_logger.start()
+    ensure_vlc()
     app.init = init
     app.save_config = save_config
 
