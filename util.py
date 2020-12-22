@@ -2,6 +2,8 @@ import pynput.keyboard as Keyboard
 import youtube_dl
 from typing import Callable, Tuple, Optional
 import subprocess
+import os
+
 mute_sh=r"""for card in $(amixer scontrols | sed "s/.* '\(.*\)',/\1/"); do amixer sset $card mute; done"""
 unmute_sh=r"""for card in $(amixer scontrols | sed "s/.* '\(.*\)',/\1/"); do amixer sset $card unmute; done"""
 
@@ -70,6 +72,11 @@ def download_audio(youtube_url: str, local_path: str, progress_hook: Optional[Ca
     
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([youtube_url])
+
+def ensure_vlc():
+    """Raise an error if VLC is not installed"""
+    rc = os.system("which cvlc")
+    assert rc == 0, 'VLC is not installed on the host'
 
 def play_audio(local_path: str):
     """Play a local file with VLC"""
