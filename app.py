@@ -25,7 +25,11 @@ def build_app():
             url = flask.request.form['ytLink']
             local_path = app.get_path(word)
             app.logger.info(f'Adding word {word} with url {url}')
-            util.download_audio(url, local_path)
+            try:
+                util.download_audio(url, local_path)
+                flask.flash(f'Successfully downloaded song for {word}.')
+            except: 
+                flask.flash(f'Failed to download song for {word}.')
             return flask.redirect(flask.url_for('index'))
         else:
             return flask.render_template('add_word.html')
@@ -78,6 +82,7 @@ def build_app():
         app.key_logger = util.KeyLogger(100, on_press)
         app.key_logger.start()
         app.debug = True
+        app.secret_key= os.urandom(24)
     app.init = init
     return app
             
