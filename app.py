@@ -84,7 +84,7 @@ def build_app():
 
         app.key_logger = util.KeyLogger(100, on_press)
         app.key_logger.start()
-        app.debug = True
+        #app.debug = True
         app.secret_key= os.urandom(24) # for flask.flash
     app.init = init
     return app
@@ -92,7 +92,7 @@ def build_app():
 def main(): 
     app = build_app()
     app.init()
-    app.run()
+    app.run(host="0.0.0.0")
 
 if __name__ == "__main__":
     main()
