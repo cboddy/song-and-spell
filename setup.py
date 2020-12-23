@@ -16,6 +16,7 @@ setup(
     description='A configurable, mutable toddler radio that encourages spelling',
     long_description=get_long_description(),
     long_description_content_type='text/markdown',
+    py_modules=['app', 'util'],
     install_requires=[
         'appdirs==1.4.4',
         'backcall==0.2.0',
