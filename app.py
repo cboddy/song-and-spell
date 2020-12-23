@@ -40,6 +40,7 @@ def build_app():
         """Delete a word"""
         local_path = app.get_path(word)
         os.remove(local_path)
+        flask.flash(f'Deleted the song for word {word}.')
 
 
     @app.route("/mute/")
