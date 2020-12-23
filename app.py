@@ -89,8 +89,10 @@ def build_app():
     app.init = init
     return app
             
-    
-if __name__ == "__main__":
+def main(): 
     app = build_app()
     app.init()
     app.run()
+
+if __name__ == "__main__":
+    main()
