@@ -50,6 +50,7 @@ setup(
         'typing-extensions==3.7.4.3',
         'wcwidth==0.2.5',
         'Werkzeug==1.0.1',
+        'wheel',
         'xdg==5.0.1',
         'youtube-dl==2020.12.14',
     ],
