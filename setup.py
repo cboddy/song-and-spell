@@ -36,7 +36,7 @@ setup(
         'pathspec==0.8.1',
         'pexpect==4.8.0',
         'pickleshare==0.7.5',
-        'pkg-resources==0.0.0',
+        #'pkg-resources==0.0.0',
         'prompt-toolkit==3.0.8',
         'ptyprocess==0.6.0',
         'Pygments==2.7.3',

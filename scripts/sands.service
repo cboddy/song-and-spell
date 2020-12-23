@@ -8,7 +8,7 @@ Type=simple
 User=pi
 Group=pi
 WorkingDirectory=/home/pi/
-ExecStart=python3  song_and_spell
+ExecStart=python3 song_and_spell
 Restart=always
 Environment=USER=pi HOME=/home/pi
 
