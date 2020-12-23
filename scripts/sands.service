@@ -1,0 +1,23 @@
+[Unit]
+Description=Song.And.Spell
+After=syslog.target
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/
+ExecStart=python3  song_and_spell
+Restart=always
+Environment=USER=pi HOME=/home/pi
+
+# Some distributions may not support these hardening directives. If you cannot start the service due
+# to an unknown option, comment out the ones not supported by your version of systemd.
+ProtectSystem=full
+PrivateDevices=yes
+PrivateTmp=yes
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
