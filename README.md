@@ -23,6 +23,29 @@ Requires VLC to be installed on the host and an X server to be running.
 
 ### notes
 * the pynput library requires an X server to be running. Set default resolution in `raspi-config` (anything other than default) to force the X server to start. 
+
+### setup  bluetooth
+```
+# install required packages
+sudo apt install bluealsa pulseaudio* bluez-tools vlc
+
+# set display to force X-server to start
+TODO
+raspi-config nonint ???
+
+# pair bluetooth
+TODO
+
+# update bluetoothd service to start  with a2dp plugin
+sudo sed -i 's#ExecStart=/usr/lib/bluetooth/bluetoothd#& --plugin=a2dp#' /lib/systemd/system/bluetooth.service
+# reload/restart bluetooth service
+systemctl daemon-reload
+systemctl restart bluetooth
+
+# switch to the bluetooth speaker as the default speaker when it connects
+echo "load-module module-switch-on-connect" >> /etc/pulse/default.pa
+
+```
 ### setup
 ```
 python3 -m venv
