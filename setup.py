@@ -8,7 +8,7 @@ def get_long_description():
 
 setup(
     name='song-and-spell',
-    version='0.8.0',
+    version='0.9.0',
     packages=find_packages(),
     author='Chris Boddy',
     author_email='chris@boddy.im',
@@ -17,7 +17,6 @@ setup(
     description='A configurable, mutable toddler radio that encourages spelling',
     long_description=get_long_description(),
     long_description_content_type='text/markdown',
-    py_modules=['app', 'util'],
     #data_files=['static/templates', (b ],
     install_requires=[
         'appdirs',
@@ -58,8 +57,11 @@ setup(
         'youtube-dl',
     ],
     include_package_data=True,
+    package_data={
+        "song_and_spell":["static/templates/*.html"],
+    },
     entry_points={
-        'console_scripts': ['song_and_spell = app:main'],
+        'console_scripts': ['song_and_spell = song_and_spell.app:main'],
     },
 )
 

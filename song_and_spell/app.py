@@ -1,7 +1,7 @@
 import flask
 import xdg
 import json
-import util
+import song_and_spell.util as util
 from typing import Optional, Dict
 import os.path
 import re

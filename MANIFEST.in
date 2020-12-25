@@ -1,2 +1,2 @@
 include README.md
-graft static/templates
+graft song_and_spell/static
