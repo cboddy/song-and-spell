@@ -4,7 +4,7 @@
 
 A key-logger that triggers playing an audio track when a sequence of keys are pressed and  a web-app to configure the words and songs.
 
-Requires VLC to be installed on the host.
+Requires VLC to be installed on the host and an X server to be running.
 
 ### todo 
 
@@ -16,11 +16,13 @@ Requires VLC to be installed on the host.
     * ~~upload file~~
       * ~~remove word/file~~
     * ~~form add word/link ~~
-* systemd service to:
-    * run on start-up
-    * restart on error
+* ~~systemd service to:~~
+    * ~~run on start-up~~
+    * ~~restart on error~~
 * bash script to deploy (ideally to an [rpi-400]https://www.raspberrypi.org/products/raspberry-pi-400/)
 
+### notes
+* the pynput library requires an X server to be running. Set default resolution in `raspi-config` (anything other than default) to force the X server to start. 
 ### setup
 ```
 python3 -m venv
