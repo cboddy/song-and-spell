@@ -80,11 +80,14 @@ def play_audio(local_path: str):
     """Play a local file with VLC"""
     subprocess.call(['cvlc', local_path])
     
-def mute_all():
-    subprocess.call(mute_sh, shell=True)
+def mute_amixer():
+    """Mute  master speaker via alsa-mixer"""
+    subprocess.call("amixer sset Master,0 mute".split())
 
-def unmute_all():
-    subprocess.call(unmute_sh, shell=True)
+def set_volume_amixer(volume_percentage: int) -> None:
+    """Set master speaker volume via alsa-mixer"""
+    assert 0 <= int(volume_percentage) <= 100, f"Volume {volume_percentage} outside the range [0,100]"
+    subprocess.call("amixer sset Master,0 {volume_percentage}% unmute".split())
 
 def main():
     download_audio('https://www.youtube.com/watch?v=BaW_jenozKc', None)

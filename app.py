@@ -45,20 +45,21 @@ def build_app():
 
     @app.route("/mute/")
     def mute():
-        """Mute all sound devices"""
-        util.mute_all()
+        util.mute_amixer()
+        flask.flash(f'Speaker muted - use slider to un-mute.')
+        
 
-    @app.route("/unmute/")
-    def unmute():
-        """Unmute all sound devices"""
-        util.unmute_all()
+    @app.route("/set_volume", methods=['POST'])
+    def set_volume():
+        volume_perc = int(flask.request.form['volume_perc'])
+        util.set_volume_amixer(volume_perc)
+        flask.flash(f'Volume set to {volume_perc}%')
 
     @app.route("/play/<word>")
     def play_song(word: str):
         """Play the song for a word"""
         local_path = app.get_path(word)
         util.play_audio(local_path)
-
 
     def init():
         os.makedirs(app.data_path, exist_ok=True)
