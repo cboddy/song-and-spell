@@ -1,4 +1,5 @@
-import pynput.keyboard as Keyboard
+#import pynput.keyboard as Keyboard
+import keyboard
 import youtube_dl
 from typing import Callable, Tuple, Optional, List
 import subprocess
@@ -34,8 +35,7 @@ class KeyLogger(object):
         def on_press(key):
             # Callback for key-press
             try:
-                #print(f'Appending {key.char}')
-                self.append(key.char)
+                self.append(key.name)
                 self.on_press(self.get_last())
             except AttributeError:
                 # special key press
@@ -48,8 +48,8 @@ class KeyLogger(object):
     def start(self):
         """Start a keyboard listener"""
         on_press, on_release = self.call_backs()
-        listener = Keyboard.Listener(on_press=on_press, on_release=on_release)
-        listener.start()
+        keyboard.on_press(callback=on_press)
+
 
 
 def download_audio(youtube_url: str, local_path: str, progress_hook: Optional[Callable]=None) -> None:
