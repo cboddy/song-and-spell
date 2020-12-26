@@ -6,6 +6,8 @@ A key-logger that triggers playing an audio track when a sequence of keys are pr
 
 Requires VLC to be installed on the host and an X server to be running.
 
+![](https://github.com/cboddy/song-and-spell/blob/master/images/song_and_spell_webui.png)
+
 ### install on raspberry-pi 400
 
 ##### With a screen attached
