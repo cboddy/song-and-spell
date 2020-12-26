@@ -76,6 +76,7 @@ def build_app():
                                   for f in os.listdir(app.data_path)
                                   if re.match(VALID_WORD, f)]
         def on_press(last_n: str) -> None:
+            last_n = last_n.lower()
             words = app.list_words()
             try:
                 longest_match = next(word 
@@ -85,6 +86,7 @@ def build_app():
                 return
             local_path = app.get_path(longest_match)
             util.play_audio(local_path)
+
         def on_space() -> None:
             util.stop_all_vlc()
 
