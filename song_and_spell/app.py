@@ -23,14 +23,24 @@ def build_app():
         """Create or update a word -> song mapping"""
         if flask.request.method == 'POST':
             word = flask.request.form['word']
-            url = flask.request.form['ytLink']
             local_path = app.get_path(word)
-            app.logger.info(f'Adding word {word} with url {url}')
-            try:
-                util.download_audio(url, local_path)
-                flask.flash(f'Successfully downloaded song for {word}.')
-            except: 
-                flask.flash(f'Failed to download song for {word}.')
+            def upload_file():
+                try:
+                    flask.request.files['uploadFile'].save(local_path)
+                    flask.flash(f'Successfully uploaded song for {word}.')
+                except:
+                    flask.flash(f'Failed to upload song for {word}.')
+            def get_from_youtube():
+                url = flask.request.form['ytLink']
+                try:
+                    util.download_audio(url, local_path)
+                    flask.flash(f'Successfully downloaded song for {word}.')
+                except: 
+                    flask.flash(f'Failed to download song for {word}.')
+            if flask.request.files['uploadFile'].content_length > 0:
+                upload_file()
+            else:
+                get_from_youtube()
             return flask.redirect(flask.url_for('index'))
         else:
             return flask.render_template('add_word.html')
@@ -72,10 +82,6 @@ def build_app():
             assert  re.match(VALID_WORD, word), f'Word {word} is not valid'
             return os.path.join(app.data_path, word)
 
-        app.get_path = get_path
-        app.list_words = lambda :[os.path.basename(f)
-                                  for f in os.listdir(app.data_path)
-                                  if re.match(VALID_WORD, f)]
         def on_press(last_n: str) -> None:
             last_n = last_n.lower()
             words = app.list_words()
@@ -87,11 +93,12 @@ def build_app():
                 return
             local_path = app.get_path(longest_match)
             util.play_audio(local_path)
+        app.get_path = get_path
+        app.list_words = lambda : [os.path.basename(f)
+                                  for f in os.listdir(app.data_path)
+                                  if re.match(VALID_WORD, f)]
 
-        def on_space() -> None:
-            util.stop_all_vlc()
-
-        app.key_logger = util.KeyLogger(100, on_press, on_space)
+        app.key_logger = util.KeyLogger(100, on_press, on_space=lambda: util.stop_all_vlc())
         app.key_logger.start()
         #app.debug = True
         app.secret_key= os.urandom(24) # for flask.flash

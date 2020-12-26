@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<form id="add_word_form" action="" role="form" method="post">
+<form id="add_word_form" action="" role="form" method="post" enctype="multipart/form-data">
 
     <div class="form-group">
         <label for="word">Word</label>
@@ -15,7 +15,22 @@
         <small id="ytLinkHelp" class="form-text text-muted">Add youtube link for word.</small>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    <div class="form-group">
+        <label for="uploadFile">Or add an mp3</label>
+        <input type="file" class="form-control"  aria-describedby="uploadFileHelp" placeholder="" name="uploadFile"/>
+        <small id="uploadFileHelp" class="form-text text-muted">Or enter a local-file path to an mp3 file.</small>
+    </div>
 
+    <button id="add_word_button" type="submit" class="btn btn-primary">Submit</button>
+</form>
+<!--
+    <script>
+        $('#add_word_button').click(function() {
+            local_path= $('#uploadFile').val()
+            console.log('local_path ' + local_path);
+
+            $('#add_word_form').attrs('enctype=multipart/form');
+        });
+    </script>
+    -->
 {%  endblock content %}
