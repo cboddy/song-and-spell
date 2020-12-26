@@ -4,8 +4,6 @@ from typing import Callable, Tuple, Optional, List
 import subprocess
 import os
 
-mute_sh=r"""for card in $(amixer scontrols | sed "s/.* '\(.*\)',/\1/"); do amixer sset $card mute; done"""
-unmute_sh=r"""for card in $(amixer scontrols | sed "s/.* '\(.*\)',/\1/"); do amixer sset $card unmute; done"""
 
 class KeyLogger(object):
     """Log the past N key-presses"""
@@ -87,7 +85,10 @@ def mute_amixer():
 def set_volume_amixer(volume_percentage: int) -> None:
     """Set master speaker volume via alsa-mixer"""
     assert 0 <= int(volume_percentage) <= 100, f"Volume {volume_percentage} outside the range [0,100]"
-    subprocess.call("amixer sset Master,0 {volume_percentage}% unmute".split())
+    subprocess.call(f"amixer sset Master,0 {volume_percentage}% unmute".split())
+    
+def get_volume_amixer() -> int:
+    subprocess.call("amixer sget Master | awk -F '[][]' '/Playback.*%.*on/ {print $2}'  |head -n1")
 
 def main():
     download_audio('https://www.youtube.com/watch?v=BaW_jenozKc', None)

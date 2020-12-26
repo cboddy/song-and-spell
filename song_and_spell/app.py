@@ -56,6 +56,7 @@ def build_app():
         volume_perc = int(flask.request.form['volume_perc'])
         util.set_volume_amixer(volume_perc)
         flask.flash(f'Volume set to {volume_perc}%')
+        return flask.redirect(flask.url_for('index'))
 
     @app.route("/play/<word>")
     def play_song(word: str):
