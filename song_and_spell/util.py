@@ -2,6 +2,7 @@ import pynput.keyboard as Keyboard
 import youtube_dl
 from typing import Callable, Tuple, Optional, List
 import subprocess
+import threading
 import os
 
 
@@ -34,8 +35,9 @@ class KeyLogger(object):
         def on_press(key):
             # Callback for key-press
             try:
-                self.append(key.char)
-                self.on_press(self.get_last())
+                if isinstance(key.char, str):
+                    self.append(key.char)
+                    self.on_press(self.get_last())
             except AttributeError:
                 # special key press
                 if str(key) == 'Key.space':
@@ -78,7 +80,7 @@ def ensure_vlc():
 
 def play_audio(local_path: str):
     """Play a local file with VLC"""
-    subprocess.call(['cvlc', '--play-and-exit', local_path])
+    threading.Thread(target=lambda: subprocess.call(['cvlc', '--play-and-exit', local_path])).start()
     
 def mute_amixer():
     """Mute  master speaker via alsa-mixer"""

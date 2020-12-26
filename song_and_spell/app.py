@@ -63,6 +63,7 @@ def build_app():
         """Play the song for a word"""
         local_path = app.get_path(word)
         util.play_audio(local_path)
+        return flask.redirect(flask.url_for('index'))
 
     def init():
         os.makedirs(app.data_path, exist_ok=True)
