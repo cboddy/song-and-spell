@@ -20,6 +20,10 @@ Requires VLC to be installed on the host and an X server to be running.
     * ~~run on start-up~~
     * ~~restart on error~~
 * bash script to deploy (ideally to an [rpi-400]https://www.raspberrypi.org/products/raspberry-pi-400/)
+* delete bug
+* ~~vlc not terminating when song finishes~~
+* volume-normalisation?
+* space to stop
 
 ### notes
 * the pynput library requires an X server to be running. Set default resolution in `raspi-config` (anything other than default) to force the X server to start. 
