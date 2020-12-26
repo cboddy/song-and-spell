@@ -78,7 +78,7 @@ def ensure_vlc():
 
 def play_audio(local_path: str):
     """Play a local file with VLC"""
-    subprocess.call(['cvlc', local_path])
+    subprocess.call(['cvlc', '--play-and-exit', local_path])
     
 def mute_amixer():
     """Mute  master speaker via alsa-mixer"""

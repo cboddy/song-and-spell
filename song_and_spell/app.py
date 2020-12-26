@@ -41,12 +41,14 @@ def build_app():
         local_path = app.get_path(word)
         os.remove(local_path)
         flask.flash(f'Deleted the song for word {word}.')
+        return flask.redirect(flask.url_for('index'))
 
 
     @app.route("/mute/")
     def mute():
         util.mute_amixer()
         flask.flash(f'Speaker muted - use slider to un-mute.')
+        return flask.redirect(flask.url_for('index'))
         
 
     @app.route("/set_volume", methods=['POST'])
