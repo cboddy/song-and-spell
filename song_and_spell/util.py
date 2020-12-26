@@ -8,13 +8,15 @@ import os
 class KeyLogger(object):
     """Log the past N key-presses"""
 
-    def __init__(self, max_length: int, on_press: Callable[[str], None]):
-        """on_press should take a string of the last max_length keys that have been pressed"""
+    def __init__(self, max_length: int, on_press: Callable[[str], None], on_space=Callable[[],None]):
+        """on_press should take a string of the last max_length keys that have been pressed
+           on_space is called if space-bar is pressed.
+        """
         self.max_length = max_length
         self.index = 0
         self.pressed = [" "] * max_length
         self.on_press= on_press
-
+        self.on_space = on_space
     @property
     def pos(self) -> int:
         return self.index % self.max_length
@@ -32,12 +34,12 @@ class KeyLogger(object):
         def on_press(key):
             # Callback for key-press
             try:
-                #print(f'Appending {key.char}')
                 self.append(key.char)
                 self.on_press(self.get_last())
             except AttributeError:
                 # special key press
-                pass
+                if str(key) == 'Key.space':
+                    self.on_space() 
         def on_release(key):
             pass
 
@@ -81,6 +83,9 @@ def play_audio(local_path: str):
 def mute_amixer():
     """Mute  master speaker via alsa-mixer"""
     subprocess.call("amixer sset Master,0 mute".split())
+
+def stop_all_vlc():
+    subprocess.call("killall -9 vlc".split())
 
 def set_volume_amixer(volume_percentage: int) -> None:
     """Set master speaker volume via alsa-mixer"""

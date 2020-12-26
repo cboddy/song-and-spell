@@ -85,8 +85,10 @@ def build_app():
                 return
             local_path = app.get_path(longest_match)
             util.play_audio(local_path)
+        def on_space() -> None:
+            util.stop_all_vlc()
 
-        app.key_logger = util.KeyLogger(100, on_press)
+        app.key_logger = util.KeyLogger(100, on_press, on_space)
         app.key_logger.start()
         #app.debug = True
         app.secret_key= os.urandom(24) # for flask.flash
