@@ -32,6 +32,7 @@ def build_app():
                     flask.flash(f'Successfully uploaded song for {word}.')
                 except:
                     flask.flash(f'Failed to upload song for {word}.')
+                    raise
             def get_from_youtube():
                 url = flask.request.form['ytLink']
                 try:
@@ -41,6 +42,7 @@ def build_app():
                 except: 
                     flask.flash(f'Failed to download song for {word}.')
                     app.logger.exception(f"Failed to add word {word} to local path {local_path} from link {url}")
+                    raise
             if flask.request.files['uploadFile'].content_length > 0:
                 upload_file()
             else:
@@ -104,7 +106,7 @@ def build_app():
 
         app.key_logger = util.KeyLogger(100, on_press, on_space=lambda: util.stop_all_vlc())
         app.key_logger.start()
-        #app.debug = True
+        app.debug = True
         app.secret_key= os.urandom(24) # for flask.flash
     app.init = init
     return app
