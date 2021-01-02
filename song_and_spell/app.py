@@ -5,6 +5,8 @@ import song_and_spell.util as util
 from typing import Optional, Dict
 import os.path
 import re
+import sys
+import logging
 
 VALID_WORD = "^\w+$"
 
@@ -22,7 +24,7 @@ def build_app():
     def add_word():
         """Create or update a word -> song mapping"""
         if flask.request.method == 'POST':
-            word = flask.request.form['word']
+            word = flask.request.form['word'].lower()
             local_path = app.get_path(word)
             def upload_file():
                 try:
@@ -35,8 +37,10 @@ def build_app():
                 try:
                     util.download_audio(url, local_path)
                     flask.flash(f'Successfully downloaded song for {word}.')
+                    app.logger.info(f"Successfully added word {word} to local path {local_path} from link {url}")
                 except: 
                     flask.flash(f'Failed to download song for {word}.')
+                    app.logger.exception(f"Failed to add word {word} to local path {local_path} from link {url}")
             if flask.request.files['uploadFile'].content_length > 0:
                 upload_file()
             else:
@@ -106,6 +110,7 @@ def build_app():
     return app
             
 def main(): 
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     app = build_app()
     app.init()
     app.run(host="0.0.0.0")
