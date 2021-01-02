@@ -3,7 +3,7 @@
 sudo apt install -y bluealsa pulseaudio* bluez-tools vlc pip3
 
 # update bluetoothd service to start  with a2dp plugin
-sudo sed -i 's#ExecStart=/usr/lib/bluetooth/bluetoothd#& --plugin=a2dp#' /lib/systemd/system/bluetooth.service
+sudo sed -i 's#ExecStart=/usr/lib/bluetooth/bluetoothd #& --plugin=a2dp#' /lib/systemd/system/bluetooth.service
 # reload/restart bluetooth service
 systemctl daemon-reload
 systemctl restart bluetooth
@@ -28,7 +28,8 @@ Group=pi
 WorkingDirectory=/home/pi/
 ExecStart=/usr/local/bin/song_and_spell
 Restart=always
-Environment=USER=pi HOME=/home/pi
+Environment=DISPLAY=:0.0 USER=pi HOME=/home/pi
+ 
 
 [Install]
 WantedBy=multi-user.target

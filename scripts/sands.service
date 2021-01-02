@@ -10,7 +10,8 @@ Group=pi
 WorkingDirectory=/home/pi/
 ExecStart=/usr/local/bin/song_and_spell
 Restart=always
-Environment=USER=pi HOME=/home/pi
+Environment=DISPLAY=:0.0 USER=pi HOME=/home/pi
+ 
 
 [Install]
 WantedBy=multi-user.target
