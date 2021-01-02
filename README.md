@@ -18,7 +18,7 @@ To install the app, add a systemd-service so that it starts on start-up  and mak
 **Note: this script will only work on a raspberry-pi (or any debian-derived OS with a bluetooth transciever and a normal user `pi` that is in the audio and bluetooth groups).**
 
 ```
-curl -L https://github.com/cboddy/song-and-spell/blob/master/scripts/install_rpi.sh | sudo bash 
+curl -L https://raw.githubusercontent.com/cboddy/song-and-spell/master/scripts/install_rpi.sh | sudo bash
 ```
 
 Note: this will restart your raspberry-pi. Turn on your speaker and it should automatically connect and go to the web-ui running on port 5000. It should look like the image below.
