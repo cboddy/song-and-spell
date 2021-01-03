@@ -24,7 +24,7 @@ def build_app():
     def add_word():
         """Create or update a word -> song mapping"""
         if flask.request.method == 'POST':
-            word = flask.request.form['word'].lower()
+            word = flask.request.form['word'].lower().strip()
             local_path = app.get_path(word)
             def upload_file():
                 try:
