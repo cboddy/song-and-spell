@@ -43,7 +43,8 @@ def build_app():
                     flask.flash(f'Failed to download song for {word}.')
                     app.logger.exception(f"Failed to add word {word} to local path {local_path} from link {url}")
                     raise
-            if flask.request.files['uploadFile'].content_length > 0:
+            uploadFile = flask.request.files.get('uploadFile')
+            if uploadFile and uploadFile.content_length > 0:
                 upload_file()
             else:
                 get_from_youtube()
