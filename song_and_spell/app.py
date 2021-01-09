@@ -18,7 +18,8 @@ def build_app():
     @app.route("/")
     def index():
         words = app.list_words()
-        return flask.render_template('index.html', words=words)
+        volume_perc = util.get_volume_percent_amixer()
+        return flask.render_template('index.html', words=words, volume_perc=volume_perc)
 
     @app.route("/add_word", methods=['POST', 'GET'])
     def add_word():
@@ -50,7 +51,8 @@ def build_app():
                 get_from_youtube()
             return flask.redirect(flask.url_for('index'))
         else:
-            return flask.render_template('add_word.html')
+            volume_perc = util.get_volume_percent_amixer()
+            return flask.render_template('add_word.html', volume_perc=volume_perc)
 
     @app.route("/delete/<word>")
     def delete_word(word: str):
