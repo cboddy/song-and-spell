@@ -27,7 +27,7 @@ Note: this will restart your raspberry-pi. Turn on your speaker and it should au
 ![](https://github.com/cboddy/song-and-spell/blob/master/images/song_and_spell_webui.png)
 
 ### todo 
-* volume-normalisation?
+* ~~volume-normalisation?~~
 
 ### notes
 * the pynput library requires an X server to be running. Set default resolution in `raspi-config` (anything other than default) to force the X server to start. 

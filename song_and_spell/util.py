@@ -81,7 +81,7 @@ def ensure_vlc():
 
 def play_audio(local_path: str):
     """Play a local file with VLC"""
-    threading.Thread(target=lambda: subprocess.call(['cvlc', '--play-and-exit', local_path])).start()
+    threading.Thread(target=lambda: subprocess.call(['cvlc', '--audio-filter', 'normvol',  '--play-and-exit', local_path])).start()
     
 def mute_amixer():
     """Mute  master speaker via alsa-mixer"""
