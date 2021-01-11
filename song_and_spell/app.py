@@ -8,12 +8,10 @@ import re
 import sys
 import logging
 
-VALID_WORD = "^\w+$"
 
 def build_app():
     """Build the flask app"""
     app = flask.Flask(__name__, template_folder='static/templates')
-    app.data_path = os.path.join(xdg.xdg_data_home(), 'song_and_spell')
 
     @app.route("/")
     def index():
@@ -81,14 +79,17 @@ def build_app():
     def play_song(word: str):
         """Play the song for a word"""
         local_path = app.get_path(word)
+        app.logger.info(f"Playing word from web-ui {word}")
         util.play_audio(local_path)
         return flask.redirect(flask.url_for('index'))
 
     def init():
+        app.data_path = os.path.join(xdg.xdg_data_home(), 'song_and_spell')
         os.makedirs(app.data_path, exist_ok=True)
         util.ensure_vlc()
+        valid_word = "^\w+$"
         def get_path(word: str) -> str:
-            assert  re.match(VALID_WORD, word), f'Word {word} is not valid'
+            assert  re.match(valid_word, word), f'Word {word} is not valid'
             return os.path.join(app.data_path, word)
 
         def on_press(last_n: str) -> None:
@@ -101,21 +102,20 @@ def build_app():
             except StopIteration:
                 return
             local_path = app.get_path(longest_match)
+            app.logger.info(f"Playing word {longest_match}")
             util.play_audio(local_path)
         app.get_path = get_path
-        app.list_words = lambda : [os.path.basename(f)
+        app.list_words = lambda: [os.path.basename(f)
                                   for f in os.listdir(app.data_path)
-                                  if re.match(VALID_WORD, f)]
-
-        app.key_logger = util.KeyLogger(100, on_press, on_space=lambda: util.stop_all_vlc())
-        app.key_logger.start()
-        app.debug = True
+                                  if re.match(valid_word, f)]
+        app.logger.info("starting keylogger")
+        util.KeyLogger(100, on_press, on_space=lambda: util.stop_all_vlc()).start()
         app.secret_key= os.urandom(24) # for flask.flash
     app.init = init
     return app
             
 def main(): 
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
     app = build_app()
     app.init()
     app.run(host="0.0.0.0")

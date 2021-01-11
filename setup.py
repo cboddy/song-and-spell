@@ -8,7 +8,7 @@ def get_long_description():
 
 setup(
     name='song-and-spell',
-    version='0.18.0',
+    version='0.20.0',
     packages=find_packages(),
     author='Chris Boddy',
     author_email='chris@boddy.im',
